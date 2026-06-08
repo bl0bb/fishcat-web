@@ -1,0 +1,150 @@
+:root {
+    --light-square: #f0d9b5;
+    --dark-square: #b58863;
+
+    --selected: #f6f669;
+    --legal-move: rgba(0, 0, 0, 0.18);
+
+    --last-move: rgba(255, 255, 0, 0.3);
+}
+
+.chessboard {
+    width: min(90vw, 720px);
+    aspect-ratio: 1;
+
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+
+    border: 2px solid #333;
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.25);
+}
+
+.square {
+    position: relative;
+
+    padding: 0;
+    margin: 0;
+
+    border: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+}
+
+.light {
+    background: var(--light-square);
+}
+
+.dark {
+    background: var(--dark-square);
+}
+
+.selected {
+    box-shadow:
+        inset 0 0 0 5px var(--selected);
+}
+
+.square:hover {
+    filter: brightness(1.06);
+}
+
+.piece {
+    width: 85%;
+    height: 85%;
+
+    pointer-events: none;
+    user-select: none;
+}
+
+.move-dot {
+    width: 24%;
+    height: 24%;
+
+    border-radius: 999px;
+
+    background:
+        rgba(0, 0, 0, 0.25);
+}
+
+.file-label {
+    position: absolute;
+    right: 4px;
+    bottom: 2px;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.rank-label {
+    position: absolute;
+    left: 4px;
+    top: 2px;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.light .file-label,
+.light .rank-label {
+    color: var(--dark-square);
+}
+
+.dark .file-label,
+.dark .rank-label {
+    color: var(--light-square);
+}
+
+
+
+
+
+
+
+
+
+
+body {
+    margin: 0;
+    font-family: sans-serif;
+}
+
+.layout {
+    display: flex;
+    gap: 24px;
+    padding: 24px;
+}
+
+.board {
+    width: 640px;
+    height: 640px;
+
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+}
+
+.square {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 48px;
+
+    user-select: none;
+    cursor: pointer;
+}
+
+.light {
+    background: #f0d9b5;
+}
+
+.dark {
+    background: #b58863;
+}
+
+.selected {
+    outline: 4px solid gold;
+}

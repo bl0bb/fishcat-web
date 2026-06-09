@@ -1,3 +1,4 @@
+// @ts-ignore
 import chessWasm from "./wasm.mjs"
 
 let exportsObj: any;
@@ -10,47 +11,34 @@ export async function initChessWasm() {
     console.log(exportsObj)
 
     return chessWasm;
-
-
-
-
-    // const response = await fetch("/chess.wasm");
-
-    // const bytes = await response.arrayBuffer();
-
-    // const { instance } = await WebAssembly.instantiate(bytes, {});
-
-    // exportsObj = instance.exports;
-
-    // return exportsObj;
 }
 
-function readCString(memory: WebAssembly.Memory, ptr: number) {
-    const bytes = new Uint8Array(memory.buffer);
+// function readCString(memory: WebAssembly.Memory, ptr: number) {
+//     const bytes = new Uint8Array(memory.buffer);
 
-    let str = "";
+//     let str = "";
 
-    while (bytes[ptr] !== 0) {
-        str += String.fromCharCode(bytes[ptr]);
-        ptr++;
-    }
+//     while (bytes[ptr] !== 0) {
+//         str += String.fromCharCode(bytes[ptr]);
+//         ptr++;
+//     }
 
-    return str;
-}
+//     return str;
+// }
 
-function writeCString(
-    memory: WebAssembly.Memory,
-    ptr: number,
-    str: string
-) {
-    const bytes = new Uint8Array(memory.buffer);
+// function writeCString(
+//     memory: WebAssembly.Memory,
+//     ptr: number,
+//     str: string
+// ) {
+//     const bytes = new Uint8Array(memory.buffer);
 
-    for (let i = 0; i < str.length; i++) {
-        bytes[ptr + i] = str.charCodeAt(i);
-    }
+//     for (let i = 0; i < str.length; i++) {
+//         bytes[ptr + i] = str.charCodeAt(i);
+//     }
 
-    bytes[ptr + str.length] = 0;
-}
+//     bytes[ptr + str.length] = 0;
+// }
 
 export function loadFen(fen: string) {
     exportsObj.ccall(

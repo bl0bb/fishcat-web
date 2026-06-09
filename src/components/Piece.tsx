@@ -7,8 +7,7 @@ interface Props {
 export default function ChessPiece({
     piece,
 }: Props) {
-    const src = `/piece/${piece.color
-        }${piece.type}.svg`;
+    const src = `${import.meta.env.BASE_URL}/piece/${piece.color}${piece.type}.svg`;
 
     return (
         <img

@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { Piece } from "../chess/types";
 import ChessPiece from "./Piece";
 
@@ -20,6 +21,8 @@ export default function Square({
 }: Props) {
     const file = square[0];
     const rank = square[1];
+    const fileIdx = square.charCodeAt(0) - 97; // a
+    const rankIdx = square.charCodeAt(1) - 49; // 1
 
     return (
         <button
@@ -28,6 +31,10 @@ export default function Square({
                 dark ? "dark" : "light",
                 selected ? "selected" : "",
             ].join(" ")}
+            style={{
+                "--square-x": fileIdx,
+                "--square-y": 7 - rankIdx,
+            } as CSSProperties}
             onClick={onClick}
         >
             {piece && (
@@ -36,6 +43,9 @@ export default function Square({
 
             {!piece && legalMove && (
                 <div className="move-dot" />
+            )}
+            {piece && legalMove && (
+                <div className="move-circle" />
             )}
 
             {file === "a" && (

@@ -1,0 +1,42 @@
+.eval_bar {
+    position: relative;
+    width: 48px;
+
+    background: #111;
+    border-radius: 8px;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.eval_bar_white {
+    width: 100%;
+    background: linear-gradient(to top, #e6e6e6, #ffffff);
+    transition: height 700ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: height;
+}
+
+.eval_bar_score {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 50%);
+
+    font-size: 11px;
+    font-weight: 800;
+    font-family: Inter, system-ui, sans-serif;
+
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+
+    transition: top 700ms cubic-bezier(0.22, 1, 0.36, 1), bottom 700ms cubic-bezier(0.22, 1, 0.36, 1), color 250ms ease;
+}
+
+.eval_bar_score--on-white {
+    color: #111;
+}
+
+.eval_bar_score--on-black {
+    color: #fff;
+}

@@ -11,24 +11,26 @@ import {
     loadFen,
     getMoves,
     getBestMove,
+    doMove,
+    getFen,
 } from "./wasm/chess";
+import ChessEvaluationBar from "./components/EvaluationBar";
 
-const START_FEN =
-    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+
+const MAX_DEPTH = 5;
 
 export default function App() {
     const [loading, setLoading] = useState(true);
 
     const [fen, setFen] = useState(START_FEN);
+    const [fenInput, setFenInput] = useState(START_FEN);
+    const [searchDepth, setSearchDepth] = useState(3);
 
-    const [selectedSquare, setSelectedSquare] =
-        useState<string | undefined>();
-
-    const [allLegalMoves, setAllLegalMoves] =
-        useState<string[]>([]);
-
-    const [bestMove, setBestMove] =
-        useState<string>("");
+    const [selectedSquare, setSelectedSquare] = useState<string | undefined>();
+    const [allLegalMoves, setAllLegalMoves] = useState<string[]>([]);
+    const [bestMove, setBestMove] = useState<string>("");
+    const [evaluation, setEvaluation] = useState<number>(0);
 
     /*
      * Parse FEN -> UI board
@@ -103,25 +105,20 @@ export default function App() {
             return;
         }
 
-        console.log("play move:", move);
-
-        /*
-         * Future WASM integration:
-         *
-         * make_move(move)
-         * const newFen = get_fen()
-         *
-         * setFen(newFen)
-         * setAllLegalMoves(getMoves())
-         */
+        doMove(move);
+        const newFen = getFen();
+        setFen(newFen);
+        setFenInput(newFen);
+        setAllLegalMoves(getMoves());
 
         setSelectedSquare(undefined);
     };
 
     const analyzePosition = () => {
-        const best = getBestMove(5);
+        const best = getBestMove(searchDepth);
 
-        setBestMove(best);
+        setBestMove(best.move);
+        setEvaluation(best.eval);
     };
 
     if (loading) {
@@ -134,43 +131,61 @@ export default function App() {
 
     return (
         <div className="app">
-            <div className="board-section">
+            <div className="game">
+                <ChessEvaluationBar
+                    evaluation={evaluation}
+                />
                 <ChessBoard
                     board={board}
                     selected={selectedSquare}
                     legalMoves={legalMovesForSelection}
                     onSquareClick={onSquareClick}
                 />
-            </div>
 
-            <aside className="sidebar">
-                <h2>Analysis</h2>
+                <aside className="sidebar">
+                    <h2>Analysis</h2>
 
-                <button
-                    onClick={analyzePosition}
-                    className="analyze-btn"
-                >
-                    Find Best Move
-                </button>
 
-                <div className="analysis-box">
-                    <strong>Engine:</strong>
-
-                    <div>
-                        {bestMove || "No analysis"}
+                    <div className="best_move_box">
+                        <input className="game_input"
+                            onChange={(e) => setSearchDepth(Math.min(parseInt(e.target.value) || 0, MAX_DEPTH))}
+                            value={searchDepth}
+                        />
+                        <button
+                            onClick={analyzePosition}
+                            className="analyze_btn"
+                        >
+                            Analyze
+                        </button>
                     </div>
-                </div>
 
-                <div className="analysis-box">
-                    <strong>FEN</strong>
+                    <div className="analysis_box">
+                        <strong>Engine:</strong>
 
-                    <textarea
-                        readOnly
-                        value={fen}
-                        rows={6}
-                    />
-                </div>
-            </aside>
+                        <div>
+                            {bestMove || "No analysis"}
+                        </div>
+                    </div>
+
+                    <div className="analysis_box">
+                        <strong>FEN</strong>
+
+                        <input className="game_input"
+                            value={fenInput}
+                            onChange={(e) => {
+                                setFenInput(e.target.value);
+                            }}
+                        />
+
+                        <button
+                            className="analyze_btn"
+                            onClick={() => setFen(fenInput)}
+                        >
+                            Update
+                        </button>
+                    </div>
+                </aside>
+            </div>
         </div>
     );
 }

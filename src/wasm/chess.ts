@@ -61,6 +61,16 @@ export function loadFen(fen: string) {
     );
 }
 
+export function getFen() {
+    const str = exportsObj.ccall(
+        "get_fen",
+        "string",
+        null,
+        null,
+    );
+    return str;
+}
+
 export function getMoves(): string[] {
     const str = exportsObj.ccall(
         "get_moves",
@@ -80,5 +90,19 @@ export function getBestMove(depth: number) {
         [depth],
     );
 
-    return str;
+    const [moveStr, evalStr] = str.split(",");
+
+    return {
+        move: moveStr,
+        eval: parseInt(evalStr) / 100,
+    };
+}
+
+export function doMove(move: string) {
+    exportsObj.ccall(
+        "do_move",
+        null,
+        ["string"],
+        [move],
+    );
 }
